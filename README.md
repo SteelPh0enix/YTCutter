@@ -11,7 +11,7 @@ Just install youtube_dl using pip and clone the repo.
 ## Usage
 Put the list of videos with track information in `input.json` and run `python .` in directory with Cutter `__main__.py` file.
 Input should look like that:
-```json
+```
 [{
     'url': 'url of the video',
     'tracklist': [{

@@ -1,32 +1,9 @@
-"""Data parser for the cutter
-If you'd ever want to create your own input format, output for this must
-be a list of dicts like this one:
-[{
-    'url': 'url of the video',
-    'filename': 'output filename of video - look InputParser.get_filename() to see how to do it',
-    'output_dir': 'output directory path, can be relative',
-    'tracklist': [{
-        'start': '00:00:00.000', (HH:MM:SS.MS format, can be shorted to HH:MM:SS for example)
-        'duration': '12:34:56.789',
-        'name': 'Track name'
-    }, { another track }]
-}, { another video }]
-"""
+"""Data parser for the cutter"""
 from datetime import datetime, timedelta
 import youtube_dl
 
 
 class InputParser(object):
-    """Default parsing class
-    Input format for this class:
-    [{
-        'url': 'url of the video',
-        'tracklist': [{
-            'track_point': 'starting point of track',
-            'name': 'name of the track'
-        }, { another track }]
-    }, {another video }]
-    """
     def __init__(self):
         pass
 
