@@ -105,3 +105,4 @@ ENV/
 *.webm
 testout/
 .vscode/
+input.json
