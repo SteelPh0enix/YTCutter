@@ -104,3 +104,4 @@ ENV/
 *.opus
 *.webm
 testout/
+.vscode/
