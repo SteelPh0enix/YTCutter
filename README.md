@@ -7,6 +7,7 @@ For now, it works only for OPUS files. This means, if your video isn't available
 
 ## Installation
 Just install youtube_dl using pip and clone the repo.
+And make sure you have FFmpeg downloaded and in PATH.
 
 ## Usage
 Pass JSON file path as argument for script. For example `python . input.json`
