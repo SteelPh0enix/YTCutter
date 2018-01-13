@@ -9,7 +9,8 @@ For now, it works only for OPUS files. This means, if your video isn't available
 Just install youtube_dl using pip and clone the repo.
 
 ## Usage
-Put the list of videos with track information in `input.json` and run `python .` in directory with Cutter `__main__.py` file.
+Pass JSON file path as argument for script. For example `python . input.json`
+
 Input should look like that:
 ```
 [{
@@ -20,5 +21,3 @@ Input should look like that:
     }, { another track }]
 }, { another video }]
 ```
-
-Will make some adjustments to that.
