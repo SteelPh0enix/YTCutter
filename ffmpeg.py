@@ -6,8 +6,7 @@ class FFmpeg(object):
     def __init__(self):
         self.ffmpeg = 'ffmpeg'
 
-    def extract_opus(self, filename: str, start: str,
-                     duration, output_file: str) -> subprocess.CompletedProcess:
+    def extract(self, filename: str, start: str, duration, output_file: str) -> subprocess.CompletedProcess:
         """Extract audio in OPUS format from file"""
         args = [self.ffmpeg, '-i', filename, '-ss',
                 start]
@@ -15,4 +14,5 @@ class FFmpeg(object):
             args += ['-t', duration]
 
         args += ['-c', 'copy', output_file]
+        print(args)
         return subprocess.run(args, stdout=subprocess.PIPE)

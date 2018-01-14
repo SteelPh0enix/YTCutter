@@ -29,7 +29,7 @@ class TestFFmpeg(unittest.TestCase):
         duration = '00:20:30'
 
         ff = ffmpeg.FFmpeg()
-        ret = ff.extract_opus(filename, start, duration, output)
+        ret = ff.extract(filename, start, duration, output)
         self.assertEqual(ret.returncode, 0)
         os.remove(output)
 
@@ -39,7 +39,7 @@ class TestFFmpeg(unittest.TestCase):
         start = '00:10:20'
 
         ff = ffmpeg.FFmpeg()
-        ret = ff.extract_opus(filename, start, None, output)
+        ret = ff.extract(filename, start, None, output)
         self.assertEqual(ret.returncode, 0)
         os.remove(output)
 

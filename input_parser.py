@@ -1,11 +1,11 @@
 """Data parser for the cutter"""
-from datetime import datetime, timedelta
+from datetime import datetime
 import youtube_dl
 
 
 class InputParser(object):
     def __init__(self):
-        pass
+        self.ytdl_options = {'format': 'bestaudio/best', 'quiet': True, 'simulate': True}
 
     @staticmethod
     def calc_duration(start: str, end: str) -> str:
@@ -18,15 +18,25 @@ class InputParser(object):
         
         return str(delta)
 
-    def parse_video(self, video: dict) -> dict:
+    def parse_video(self, video: dict):
+        video_info = self.get_video_info(video['url'])
         ret = dict()
         ret['url'] = video['url']
-        ret['filename'] = self.get_filename(video['url'])
+        ret['filename'] = self.get_filename(video_info).rsplit('.', 1)[0]
         ret['output_dir'] = ret['filename'].rsplit('-', 1)[0]
-        ret['tracklist'] = self.parse_tracks(video['tracklist'])
+
+        if 'tracklist' not in video:
+            tracklist = self.get_track_list(video_info)
+            if tracklist is not None:
+                ret['tracklist'] = self.parse_tracks_from_video(tracklist)
+                return ret
+            else:
+                return None
+
+        ret['tracklist'] = self.parse_user_tracks(video['tracklist'])
         return ret
 
-    def parse_tracks(self, tracks: list) -> list:
+    def parse_user_tracks(self, tracks: list) -> list:
         ret = list()
         for i in range(0, len(tracks) - 1):
             tmp_track = dict()
@@ -45,16 +55,45 @@ class InputParser(object):
         ret.append(tmp_track)
         return ret
 
-    def parse_input(self, data: list) -> list:
+    def parse_input(self, data: list):
         """Parse input to output format (see module docstring for info)"""
         ret = list()
         for video in data:
-            ret.append(self.parse_video(video))
+            data = self.parse_video(video)
+            if data is None:
+                return None
+            ret.append(data)
         return ret
 
+    def get_video_info(self, url: str) -> dict:
+        """Get info about video"""
+        ytdl = youtube_dl.YoutubeDL(self.ytdl_options)
+        return ytdl.extract_info(url)
+
+    def get_filename(self, video_info) -> str:
+        """Get filename of youtube_dl output file"""
+        ytdl = youtube_dl.YoutubeDL(self.ytdl_options)
+        return ytdl.prepare_filename(video_info)
+
     @staticmethod
-    def get_filename(url: str) -> str:
-        """Get filename for output file. Not very efficient. Maybe will change later."""
-        ytdl = youtube_dl.YoutubeDL({'quiet': True, 'simulate': True})
-        result = ytdl.extract_info(url)
-        return ytdl.prepare_filename(result)
+    def get_video_name(video_info) -> str:
+        return video_info['title']
+
+    @staticmethod
+    def get_track_list(video_info):
+        if 'chapters' not in video_info:
+            return None
+        else:
+            return video_info['chapters']
+
+    @staticmethod
+    def parse_tracks_from_video(tracklist):
+        ret = list()
+        for track in tracklist:
+            t = dict()
+            t['name'] = track['title']
+            t['start'] = str(track['start_time'])
+            t['duration'] = str(track['end_time'] - track['start_time'])
+            ret.append(t)
+
+        return ret
