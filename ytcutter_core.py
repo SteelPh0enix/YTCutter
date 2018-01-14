@@ -49,6 +49,11 @@ class YTCutter(object):
             if out.returncode != 0:
                 print("FFmpeg returned with code {0}".format(out.returncode))
                 print(out.stdout)
+    @staticmethod
+    def find_audio_file(filename):
+        for file in os.listdir(os.getcwd()):
+            if file.startswith(filename) and not file.endswith('.part'):
+                return file
 
     def run(self, input_data):
         """Run the cutter with raw input data"""
@@ -57,17 +62,15 @@ class YTCutter(object):
             raise CouldNotReadTracksException
 
         for video in parsed:
-            self.download(video['url'])
+            audio_file = self.find_audio_file(video['filename'])
 
-            video_file_glob = glob.glob("{0}.*".format(video['filename']))
-            if video_file_glob[0].rsplit('.', 1)[1] == 'part':
-                video_file = video_file_glob[1]
-            else:
-                video_file = video_file_glob[0]
+            if audio_file is None:
+                self.download(video['url'])
+                audio_file = self.find_audio_file(video['filename'])
 
-            self.cut(video_file, video['tracklist'], video['output_dir'])
+            self.cut(audio_file, video['tracklist'], video['output_dir'])
             print("Downloaded video and cutted to {2} tracks.\n"
                   "Original file is {0}\n"
-                  "Tracks are in {1}\\ directory.".format(video_file,
+                  "Tracks are in {1}\\ directory.".format(audio_file,
                                                           video['output_dir'],
                                                           len(video['tracklist'])))

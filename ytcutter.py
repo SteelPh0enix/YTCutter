@@ -8,7 +8,7 @@ if __name__ == '__main__':
         print("USAGE:\nPass an URL as argument or \'-f [filename]\' to read input from file.")
         sys.exit(1)
 
-    if sys.argv[1] == 'f':
+    if sys.argv[1] == '-f':
         with open(sys.argv[2], 'r') as f:
             data = json.load(f)
     else:

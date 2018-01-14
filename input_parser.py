@@ -1,6 +1,23 @@
 """Data parser for the cutter"""
 from datetime import datetime
 import youtube_dl
+import unicodedata
+import string
+
+valid_filename_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+
+
+def clean_filename(filename, whitelist=valid_filename_chars, replace=' '):
+    """Took from https://gist.github.com/wassname/1393c4a57cfcbf03641dbc31886123b8"""
+    # replace spaces
+    for r in replace:
+        filename = filename.replace(r, ' ')
+
+    # keep only valid ascii chars
+    cleaned_filename = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore').decode()
+
+    # keep only whitelisted chars
+    return ''.join(c for c in cleaned_filename if c in whitelist)
 
 
 class InputParser(object):
@@ -10,13 +27,28 @@ class InputParser(object):
     @staticmethod
     def calc_duration(start: str, end: str) -> str:
         try:
-            time_format = "%M:%S"
-            delta = datetime.strptime(end, time_format) - datetime.strptime(start, time_format)
+            start_time = datetime.strptime(start, "%M:%S")
         except ValueError:
-            time_format = "%H:%M:%S"
-            delta = datetime.strptime(end, time_format) - datetime.strptime(start, time_format)
-        
-        return str(delta)
+            try:
+                start_time = datetime.strptime(start, "%M:%S.%f")
+            except ValueError:
+                try:
+                    start_time = datetime.strptime(start, "%H:%M:%S")
+                except ValueError:
+                    start_time = datetime.strptime(start, "%H:%M:%S.%f")
+
+        try:
+            end_time = datetime.strptime(end, "%M:%S")
+        except ValueError:
+            try:
+                end_time = datetime.strptime(end, "%M:%S.%f")
+            except ValueError:
+                try:
+                    end_time = datetime.strptime(end, "%H:%M:%S")
+                except ValueError:
+                    end_time = datetime.strptime(end, "%H:%M:%S.%f")
+
+        return str(end_time - start_time)
 
     def parse_video(self, video: dict):
         video_info = self.get_video_info(video['url'])
@@ -91,7 +123,7 @@ class InputParser(object):
         ret = list()
         for track in tracklist:
             t = dict()
-            t['name'] = track['title']
+            t['name'] = clean_filename(track['title'])
             t['start'] = str(track['start_time'])
             t['duration'] = str(track['end_time'] - track['start_time'])
             ret.append(t)
