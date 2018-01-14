@@ -8,6 +8,8 @@ It can get the tracklist from video's metadata, or you can pass the tracklist as
 Just install youtube_dl using pip and clone this repo.
 And make sure you have FFmpeg downloaded and in PATH.
 
+To make your own executable, install cx_Freeze and run `python setup.py build`
+
 ## Usage
 ``ytcutter.exe [video url]``.
 And the cutter will try to get tracklist from video metadata and download&cut it.
