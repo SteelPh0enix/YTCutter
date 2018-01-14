@@ -27,4 +27,4 @@ Input should look like that:
 
 You can ommit tracklist, because some of the videos has the tracklist in metadata.
 Cutter will try to use it, or will return an error if it will be unable to.
-After that, you should get your video cutted to tracks in a folder with the video title.
+After that, you should get your video cutted to tracks in a video title directory.
