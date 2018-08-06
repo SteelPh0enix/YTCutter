@@ -1,0 +1,20 @@
+import argparse
+import cuttercore
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        usage="%(prog)s youtube video links (downloads all the videos basing on tracklists inside description)\n"
+        "or\n"
+        "%(prog)s -f file.json (downloads videos according to file structure)",
+        epilog="just don't forget to buy the stuff you download, be kind to creators")
+    parser.add_argument("-f", "--file", help="Use JSON file instead of YouTube link(s)", action="store_false")
+    parser.add_argument("videos", help="Link(s) to YouTube video or path to JSON file", type=str, nargs="*")
+    args = parser.parse_args()
+        
+    cutter = cuttercore.CutterCore()
+
+    print(args.videos)
+    if args.file:
+        cutter.parse_file(args.videos[0])
+    else:
+        cutter.parse_videos(args.videos)
