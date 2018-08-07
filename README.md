@@ -19,13 +19,17 @@ Then, just clone the repo and use
 ## Examples
 
 Download single video and cut the stuff basing on metadata
+
 `python3 ytcutter.py https://www.youtube.com/watch?v=Z5bgZSc4imE`
+
 Tracks should be in directory named like video title
 
 Download multiple videos and cut the stuff basing on metadata
+
 `python3 ytcutter.py https://www.youtube.com/watch?v=Z5bgZSc4imE https://www.youtube.com/watch?v=jLjdhK8_7pg`
 
 Download video(s) using file as metadata container
+
 `python3 ytcutter.py -f file.json`
 
 File structure should look like this:
