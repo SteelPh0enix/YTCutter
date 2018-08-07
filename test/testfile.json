@@ -1,0 +1,34 @@
+[
+    {
+        "url": "https://www.youtube.com/watch?v=Z5bgZSc4imE",
+        "artist": "Raydar",
+        "album": "Evil Squad II",
+        "tracklist": [
+            {
+                "start": "00:00",
+                "name": "Belzebub (Prelude)"
+            }, {
+                "start": "02:35",
+                "name": "The Gathering"
+            }, {
+                "start": "06:54",
+                "name": "It Comes At Night"
+            }, {
+                "start": "10:42.6",
+                "name": "Murder Music"
+            }, {
+                "start": "15:12",
+                "name": "Rise (Interlude)"
+            }, {
+                "start": "17:20",
+                "name": "Pumpkin Head"
+            }, {
+                "start": "22:25",
+                "name": "From The Grave"
+            }, {
+                "start": "26:32",
+                "name": "Cursed to Repeat (Postlude)"
+            }
+        ]
+    }
+]

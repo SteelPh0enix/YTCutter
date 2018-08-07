@@ -1,32 +1,91 @@
 # YTCutter
-YouTube video downloading&amp;cutting tool
 
-This script can be used for downloading and automatically splitting music albums uploaded to YouTube.
-It can get the tracklist from video's metadata, or you can pass the tracklist as JSON file.
+Simple tool for downloading and cutting albums on YouTube to tracks
+
+## Features
+
+* Download and cut album(s) using video metadata
+* Download and cut album(s) using user-defined JSON file with information
+* Selection of output format (and conversion using FFMpeg)
+* Automatical tagging
 
 ## Installation
-Just install youtube_dl using pip and clone this repo.
-And make sure you have FFmpeg downloaded and in PATH.
 
-To make your own executable, install cx_Freeze and run `python setup.py build`
+First, install the prerequisites - you'll need youtube-dl installed using pip3 and FFMpeg in your PATH.
+Then, just clone the repo and use
+`python3 ytcutter.py --help`
+(or similar command, you know, just run the ytcutter.py) to get information about usage.
 
-## Usage
-``ytcutter.exe [video url]``.
-And the cutter will try to get tracklist from video metadata and download&cut it.
+## Examples
 
-Or, you can pass JSON file path as argument for script. For example `ytcutter.exe -f input.json`
+Download single video and cut the stuff basing on metadata
+`python3 ytcutter.py https://www.youtube.com/watch?v=Z5bgZSc4imE`
+Tracks should be in directory named like video title
 
-Input should look like that:
+Download multiple videos and cut the stuff basing on metadata
+`python3 ytcutter.py https://www.youtube.com/watch?v=Z5bgZSc4imE https://www.youtube.com/watch?v=jLjdhK8_7pg`
+
+Download video(s) using file as metadata container
+`python3 ytcutter.py -f file.json`
+
+File structure should look like this:
+```json
+[
+    {
+        "url": "https://www.youtube.com/watch?v=Z5bgZSc4imE",
+        "artist": "Raydar",
+        "album": "Evil Squad II",
+        "tracklist": [
+            {
+                "start": "00:00",
+                "name": "Belzebub (Prelude)"
+            }, {
+                "start": "02:35",
+                "name": "The Gathering"
+            }, {
+                "start": "06:54",
+                "name": "It Comes At Night"
+            }, {
+                "start": "10:42.6",
+                "name": "Murder Music"
+            }, {
+                "start": "15:12",
+                "name": "Rise (Interlude)"
+            }, {
+                "start": "17:20",
+                "name": "Pumpkin Head"
+            }, {
+                "start": "22:25",
+                "name": "From The Grave"
+            }, {
+                "start": "26:32",
+                "name": "Cursed to Repeat (Postlude)"
+            }
+        ]
+    }, {
+        "url": "https://www.youtube.com/watch?v=...",
+        "artist": "Artist name",
+        "album": "Album name",
+        "tracklist": [
+            {
+                "start": "00:00:00.00",
+                "name": "First track"
+            }, {
+                "start": "12:34:56.789",
+                "name": "Second track"
+            }, {
+                "start": "21:37",
+                "name": "Third track"
+            }
+        ]
+    }, {
+        "url": "https://www.youtube.com/watch?v=...",
+        "artist": "Artist name",
+        "album": "Album name"
+    }
+]
 ```
-[{
-    'url': 'url of the video',
-    'tracklist': [{
-        'start': '00:00:00.000', (HH:MM:SS.MS format, can be shorted to HH:MM:SS or MM:SS, or just seconds. Must be a string.)
-        'name': 'Track name'
-    }, { another track }]
-}, { another video }]
-```
 
-You can ommit tracklist, because some of the videos has the tracklist in metadata.
-Cutter will try to use it, or will return an error if it will be unable to.
-After that, you should get your video cutted to tracks in a video title directory.
+Basically, it's an array of objects, with every object representing a single video, containing URL, artist, album and tracklist (which is an array or objects with timestamps and names).
+Time format it HH:MM:SS.MS, and can be shortened to MM:SS or HH:MM:SS to get precise timestamps of tracks.
+In case there's no "tracklist", cutter will try to get it from metadata, so it's handy if we want to get multiple videos with proper tags (which won't be applied if video is just simply downloaded using basic command, because it'll be difficut to get artist/album name properly just from metadata - sorry), and don't want to spend time copying the tracklist from video description.
