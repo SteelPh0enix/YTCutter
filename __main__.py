@@ -1,7 +1,7 @@
 import argparse
 import cuttercore
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         usage="%(prog)s youtube video links (downloads all the videos basing on tracklists inside description)\n"
         "or\n"
@@ -18,3 +18,6 @@ if __name__ == '__main__':
         cutter.parse_files(args.videos, args.nodelete)
     else:
         cutter.download_videos(args.videos, args.nodelete)
+
+if __name__ == '__main__':
+    main()
